@@ -225,6 +225,10 @@ if senha_correta or page != "Consultar ponto":
                     st.success(f"Funcionário {nome} cadastrado com sucesso!")
                 else:
                     st.warning("Por favor, preencha todos os campos.")
+
+            st.subheader("Funcionários Cadastrados:")
+            st.table(df_funcionarios)
+
         else:
             st.warning("Senha incorreta. Tente novamente.")
 
