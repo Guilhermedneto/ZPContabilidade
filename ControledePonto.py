@@ -9,6 +9,7 @@ local_timezone = pytz.timezone('America/Sao_Paulo')  # Substitua pelo fuso horá
 
 # Obtenha a hora atual com o fuso horário local
 hora_local = datetime.now(local_timezone)
+hora_local_formatada = hora_local.strftime('%Y-%m-%d %H:%M:%S')
 
 # Função para carregar a planilha de funcionários
 def load_funcionarios_data():
@@ -117,7 +118,7 @@ if senha_correta or page != "Consultar ponto":
                 # Botão para confirmar o registro
                 if st.button("Registrar Entrada"):
                     # Registra a hora de entrada atual
-                    hora_entrada = datetime.now().strftime(data_hora_format)
+                    hora_entrada = datetime.now(local_timezone).strftime(data_hora_format)  # Obter hora local atual
 
                     # Cria um novo registro
                     novo_registro = pd.DataFrame({
@@ -137,7 +138,7 @@ if senha_correta or page != "Consultar ponto":
                 # Botão para registrar saída
                 if st.button("Registrar Saída"):
                     # Registra a hora de saída atual
-                    hora_saida = datetime.now().strftime(data_hora_format)
+                    hora_saida = datetime.now(local_timezone).strftime(data_hora_format)
 
                     # Procura o índice do registro de entrada correspondente
                     index = df_registro_ponto[(df_registro_ponto['codigo'] == int(codigo_funcionario)) & (
