@@ -184,8 +184,10 @@ if senha_correta or page != "Consultar ponto":
             st.write(dados_filtrados)
 
             # Calcular o tempo decorrido entre entrada e saída
-            dados_filtrados['hora_saida'] = pd.to_datetime(dados_filtrados['hora_saida'])
-            dados_filtrados['hora_entrada'] = pd.to_datetime(dados_filtrados['hora_entrada'])
+            dados_filtrados['hora_saida'] = pd.to_datetime(dados_filtrados['hora_saida'], format='%Y-%m-%d %H:%M:%S',
+                                                           errors='coerce')
+            dados_filtrados['hora_entrada'] = pd.to_datetime(dados_filtrados['hora_entrada'],
+                                                             format='%Y-%m-%d %H:%M:%S', errors='coerce')
 
             dados_filtrados['tempo_decorrido'] = (dados_filtrados['hora_saida'] - dados_filtrados['hora_entrada']).astype(str)
 
