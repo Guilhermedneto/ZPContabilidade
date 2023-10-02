@@ -120,13 +120,13 @@ if senha_correta or page != "Consultar ponto":
                 # Botão para confirmar o registro
                 if st.button("Registrar Entrada"):
                     # Registra a hora de entrada atual
-                    hora_entrada = datetime.now(local_timezone).time()
+                    hora_entrada = datetime.now(local_timezone).strftime('%Y-%d-%m %H-%M-%S')
 
                     # Cria um novo registro
                     novo_registro = pd.DataFrame({
                         'codigo': [int(codigo_funcionario)],
                         'nome': [funcionario['nome'].values[0]],
-                        'data': [datetime.now().date()],
+                        'data': [datetime.now().date().strftime('%Y-%d-%m')],
                         'hora_entrada': [hora_entrada],
                         'hora_saida': [None]
                     })
@@ -140,7 +140,7 @@ if senha_correta or page != "Consultar ponto":
                 # Botão para registrar saída
                 if st.button("Registrar Saída"):
                     # Registra a hora de saída atual
-                    hora_saida = datetime.now(local_timezone).time()
+                    hora_saida = datetime.now(local_timezone).strftime('%Y-%d-%m %H-%M-%S')
 
                     # Procura o índice do registro de entrada correspondente
                     index = df_registro_ponto[(df_registro_ponto['codigo'] == int(codigo_funcionario)) & (
