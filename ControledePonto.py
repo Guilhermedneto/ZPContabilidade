@@ -1,8 +1,16 @@
 import streamlit as st
 import pandas as pd
+import pytz
 from datetime import datetime, timedelta
 
-# Função para carregar a planilha de funcionários
+# Obtenha o fuso horário local
+local_timezone = pytz.timezone('America/Sao_Paulo')  # Substitua pelo fuso horário da sua localização
+
+# Obtenha a hora atual com o fuso horário local
+hora_local = datetime.now(local_timezone)
+
+
+
 # Função para carregar a planilha de funcionários
 def load_funcionarios_data():
     df = pd.read_excel('funcionarios.xlsx', converters={'data_admissao': pd.to_datetime}, date_format='%d/%m/%Y')
@@ -112,7 +120,7 @@ if senha_correta or page != "Consultar ponto":
                 # Botão para confirmar o registro
                 if st.button("Registrar Entrada"):
                     # Registra a hora de entrada atual
-                    hora_entrada = datetime.now().strftime(data_hora_format)
+                    hora_entrada = datetime.now(local_timezone).time()
 
                     # Cria um novo registro
                     novo_registro = pd.DataFrame({
@@ -132,7 +140,7 @@ if senha_correta or page != "Consultar ponto":
                 # Botão para registrar saída
                 if st.button("Registrar Saída"):
                     # Registra a hora de saída atual
-                    hora_saida = datetime.now().strftime(data_hora_format)
+                    hora_saida = datetime.now(local_timezone).time()
 
                     # Procura o índice do registro de entrada correspondente
                     index = df_registro_ponto[(df_registro_ponto['codigo'] == int(codigo_funcionario)) & (
@@ -176,8 +184,10 @@ if senha_correta or page != "Consultar ponto":
             st.write(dados_filtrados)
 
             # Calcular o tempo decorrido entre entrada e saída
-            dados_filtrados['tempo_decorrido'] = (
-                    dados_filtrados['hora_saida'] - dados_filtrados['hora_entrada']).astype(str)
+            dados_filtrados['hora_saida'] = pd.to_datetime(dados_filtrados['hora_saida'])
+            dados_filtrados['hora_entrada'] = pd.to_datetime(dados_filtrados['hora_entrada'])
+
+            dados_filtrados['tempo_decorrido'] = (dados_filtrados['hora_saida'] - dados_filtrados['hora_entrada']).astype(str)
 
             # Exibe o tempo decorrido
 
