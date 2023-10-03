@@ -26,10 +26,17 @@ def load_registro_ponto_data():
     return df
 
 # Define o título da página
-st.title("Registro de Ponto")
+st.title("ZP Contabilidade")
+
+st.sidebar.header("Menu")
+st.sidebar.divider()
+
 
 # Adiciona uma barra lateral com as opções
 page = st.sidebar.selectbox("Escolha uma página:", ("Página Inicial", "Registrar Entrada/Saída", "Consultar ponto", "Cadastrar Funcionário"))
+
+
+
 # Variável para verificar se a senha está correta
 senha_correta = False
 
@@ -38,8 +45,8 @@ if page == "Consultar ponto":
     senha = st.text_input("Digite a senha de acesso:", type="password")
     if senha == "1234":
         senha_correta = True
-        st.empty()
-    else:
+        #st.empty()
+    elif senha != "":
         st.warning("Senha incorreta. Tente novamente.")
 
 if senha_correta or page != "Consultar ponto":
@@ -73,6 +80,7 @@ if senha_correta or page != "Consultar ponto":
     if page == "Página Inicial":
         st.info(
             "Ontem foi embora. Amanhã ainda não veio. Temos somente hoje, comecemos! Qualquer ato de amor, por menor que seja, é um trabalho pela paz.")
+        st.divider()
         st.subheader("Controle de Ponto")
 
         # Mensagem de boas-vindas
@@ -95,13 +103,14 @@ if senha_correta or page != "Consultar ponto":
         st.write("© SevenTec - Bebedouro - Todos os direitos reservados.")
 
     elif page == "Registrar Entrada/Saída":
+        st.subheader(':blue[Registro de Entrada e Saída]')
         st.write("Você está na página de registro de entrada/saída.")
 
         # Campo para inserir o código do funcionário
-        codigo_funcionario = st.text_input("Digite o código do funcionário:")
+        codigo_funcionario = st.text_input("Digite o código do funcionário:", key="codigo_funcionario")
 
         # Botão para limpar os dados e retornar à página "Registrar Entrada/Saída"
-        if st.button("Limpar"):
+        if st.button("Limpar", key="limpar_codigo"):
             codigo_funcionario = ""
 
         if codigo_funcionario:
@@ -188,12 +197,15 @@ if senha_correta or page != "Consultar ponto":
             tempo_total = tempo_total.sum()
 
             st.write(f"Tempo total no mês corrente para o usuário {usuario_selecionado}: {tempo_total}")
+        else:
+            st.warning("Não há registros de entrada e saída para o mês e usuário selecionados.")
 
     elif page == "Cadastrar Funcionário":
         senha = st.text_input("Digite a senha de acesso:", type="password")
         if senha == "1234":
             senha_correta = True
             st.empty()
+
 
             # Formulário para cadastrar um novo funcionário
             codigo_funcionario = st.text_input("Código do Funcionário:", key="codigo_funcionario")
@@ -229,7 +241,7 @@ if senha_correta or page != "Consultar ponto":
             st.subheader("Funcionários Cadastrados:")
             st.table(df_funcionarios)
 
-        else:
+        elif senha != "":
             st.warning("Senha incorreta. Tente novamente.")
 
 
